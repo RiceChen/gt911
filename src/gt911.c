@@ -479,4 +479,3 @@ int rt_hw_gt911_init(const char *name, struct rt_touch_config *cfg)
 
     return RT_EOK;
 }
-

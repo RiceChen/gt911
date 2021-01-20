@@ -36,4 +36,6 @@
 
 #define GT911_CHECK_SUM         0x80FF
 
+int rt_hw_gt911_init(const char *name, struct rt_touch_config *cfg);
+
 #endif /* gt911.h */
