@@ -8,11 +8,6 @@
  * 2021-01-13     RiceChen     the first version
  */
 
-#include <rtthread.h>
-#include <rtdevice.h>
-
-#include <string.h>
-
 #define DBG_TAG "gt911"
 #define DBG_LVL DBG_INFO
 #include <rtdbg.h>
@@ -443,13 +438,24 @@ int rt_hw_gt911_init(const char *name, struct rt_touch_config *cfg)
     /* hw init*/
     rt_pin_mode(*(rt_uint8_t *)cfg->user_data, PIN_MODE_OUTPUT);
     rt_pin_mode(cfg->irq_pin.pin, PIN_MODE_OUTPUT);
+    rt_pin_write(cfg->irq_pin.pin, PIN_LOW);
     rt_pin_write(*(rt_uint8_t *)cfg->user_data, PIN_LOW);
-    rt_thread_delay(10);
+    rt_thread_mdelay(10);
+    
+#ifdef PKG_GT911_USING_LOW_ADDR
+    rt_pin_write(cfg->irq_pin.pin, PIN_HIGH);
+    rt_thread_mdelay(10);
     rt_pin_write(*(rt_uint8_t *)cfg->user_data, PIN_HIGH);
-    rt_thread_delay(10);
+    rt_thread_mdelay(10);
     rt_pin_write(cfg->irq_pin.pin, PIN_MODE_INPUT);
-    rt_thread_delay(100);
-
+    gt911_client.client_addr = GT911_ADDRESS_LOW;
+#else
+    rt_pin_write(*(rt_uint8_t *)cfg->user_data, PIN_HIGH);
+    rt_thread_mdelay(10);
+    rt_pin_write(cfg->irq_pin.pin, PIN_MODE_INPUT);
+    gt911_client.client_addr = GT911_ADDRESS_HIGH;
+#endif
+    
     gt911_client.bus = (struct rt_i2c_bus_device *)rt_device_find(cfg->dev_name);
 
     if(gt911_client.bus == RT_NULL)
@@ -464,7 +470,6 @@ int rt_hw_gt911_init(const char *name, struct rt_touch_config *cfg)
         return -RT_ERROR;
     }
 
-    gt911_client.client_addr = GT911_ADDRESS_HIGH;
     gt911_soft_reset(&gt911_client);
 
     /* register touch device */

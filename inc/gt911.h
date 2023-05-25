@@ -11,7 +11,8 @@
 #ifndef __GT911_H__
 #define __GT911_H__
 
-#include "touch.h"
+#include <rtthread.h>
+#include <rtdevice.h>
 
 #define GT911_ADDR_LEN          2
 #define GT911_REGITER_LEN       2

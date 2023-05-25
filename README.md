@@ -64,6 +64,14 @@ int rt_hw_gt911_port(void)
 INIT_ENV_EXPORT(rt_hw_gt911_port);
 ```
 
+#### 注意事项：
+
+- 默认将 I2C 从机地址设置为 `0x5D` ，如要将地址设为 `0x14` ，使用如下宏定义：
+
+  ```c
+  #define PKG_GT911_USING_LOW_ADDR
+  ```
+
 ## 联系人信息
 
 维护人:

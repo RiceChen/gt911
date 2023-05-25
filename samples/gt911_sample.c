@@ -8,8 +8,6 @@
  * 2021-01-13     RiceChen     the first version
  */
 
-#include <rtthread.h>
-#include <rtdevice.h>
 #include "gt911.h"
 
 #define THREAD_PRIORITY   25
